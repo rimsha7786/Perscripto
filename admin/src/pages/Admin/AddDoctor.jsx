@@ -1,77 +1,206 @@
-import React from 'react'
-import { assets } from '../../assets/assets'
+import React from "react";
+import { assets } from "../../assets/assets";
+import {useState} from 'react'
+
 const AddDoctor = () => {
+
+
+const [docImg, setDocImg] = useState(false);
+
+const [name, setName] = useState("");
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+
+const [experience, setExperience] = useState("1 Year");
+const [fees, setFees] = useState("");
+
+const [speciality, setSpeciality] = useState("General Physician");
+const [degree, setDegree] = useState("");
+
+const [address1, setAddress1] = useState("");
+const [address2, setAddress2] = useState("");
+
+const [about, setAbout] = useState("");
+
+
+
+
+
+
+
+
   return (
-   <form>
-    <p>Add Doctor</p>
-    <div>
-      <label htmlFor="doc-img">
-        <img src={assets.upload_area}/>
+    <form className="w-full max-w-5xl mx-auto p-6 bg-white rounded-lg shadow">
+      <p className="text-xl font-semibold mb-6">Add Doctor</p>
 
-      </label>
-      <input type = "file" id="doc-img" hidden/>
-      <p>Upload doctor <br/>picture</p>
-    </div>
-    <div>
-      <div>
-        <div>
-          <p>Doctor Name</p>
-          <input type="text" placeholder="Name" required/>
+      {/* Upload Image */}
+      <div className="flex items-center gap-4 mb-8">
+        <label htmlFor="doc-img" className="cursor-pointer">
+          <img
+            src={docImg ? URL.createObjectURL(docImg) : assets.upload_area}
+            alt=""
+            className="w-20 h-20 rounded-full object-cover"
+          />
+        </label>
+
+        <input onChange={(e) => setDocImg(e.target.files[0])} type="file" id="doc-img" hidden />
+
+        <p className="text-gray-500">
+          Upload doctor <br />
+          picture
+        </p>
+      </div>
+
+      {/* Form */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Left Side */}
+        <div className="space-y-4">
+          <div>
+            <p className="mb-1 text-sm text-gray-600">Doctor Name</p>
+            <input
+              type="text"
+              placeholder="Name"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)} 
+              className="w-full px-3 py-2 border border-gray-200 rounded-md bg-[#F8F9FD] outline-none focus:border-primary"
+            />
+          </div>
+
+          <div>
+            <p className="mb-1 text-sm text-gray-600">Doctor Email</p>
+            <input
+              type="email"
+              placeholder="Email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-md bg-[#F8F9FD] outline-none focus:border-primary"
+            />
+          </div>
+
+          <div>
+            <p className="mb-1 text-sm text-gray-600">Doctor Password</p>
+            <input
+              type="password"
+              placeholder="Password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-md bg-[#F8F9FD] outline-none focus:border-primary"
+            />
+          </div>
+
+          <div>
+            <p className="mb-1 text-sm text-gray-600">Experience</p>
+            <select 
+            value={experience}
+            onChange={(e) => setExperience(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-200 rounded-md bg-[#F8F9FD] outline-none focus:border-primary">
+              <option value="1 Year">1 Year</option>
+              <option value="2 Years">2 Years</option>
+              <option value="3 Years">3 Years</option>
+              <option value="4 Years">4 Years</option>
+              <option value="5 Years">5 Years</option>
+              <option value="6 Years">6 Years</option>
+              <option value="7 Years">7 Years</option>
+              <option value="8 Years">8 Years</option>
+              <option value="9 Years">9 Years</option>
+              <option value="10 Years">10 Years</option>
+            </select>
+          </div>
+
+          <div>
+            <p className="mb-1 text-sm text-gray-600">Fees</p>
+            <input
+              type="number"
+              placeholder="Fees"
+              required
+              value={fees}
+              onChange={(e) => setFees(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-md bg-[#F8F9FD] outline-none focus:border-primary"
+            />
+          </div>
         </div>
-         <div>
-          <p>Doctor Email</p>
-          <input type="email" placeholder="Email" required/>
-        </div>
-        <div>
-          <p>Doctor Password</p>
-          <input type="password" placeholder="Password" required/>
-        </div>
-        <div>
-          <p>Experience</p>
-          <select>
-            <option value="1 Year">1 Year</option>
-            <option value="2 Years">2 Years</option>
-            <option value="3 Years">3 Years</option>
-            <option value="4 Years">4 Years</option>
-            <option value="5 Years">5 Years</option>
-            <option value="6 Years">6 Years</option>
-            <option value="7 Years">7 Years</option>
-            <option value="8 Years">8 Years</option>
-            <option value="9 Years">9 Years</option>
-            <option value="10 Years">10 Years</option>
-          </select>
-        </div>
-        <div>
-          <p>Fees</p>
-          <input type ="number" placeholder="Fees" required/>
+
+        {/* Right Side */}
+        <div className="space-y-4">
+          <div>
+            <p className="mb-1 text-sm text-gray-600">Speciality</p>
+            <select 
+              value={speciality}
+              onChange={(e) => setSpeciality(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-md bg-[#F8F9FD] outline-none focus:border-primary">
+              <option value="General Physician">General Physician</option>
+              <option value="Cardiologist">Cardiologist</option>
+              <option value="Dermatologist">Dermatologist</option>
+              <option value="Neurologist">Neurologist</option>
+              <option value="Pediatrician">Pediatrician</option>
+              <option value="Gynecologist">Gynecologist</option>
+            </select>
+          </div>
+
+          <div>
+            <p className="mb-1 text-sm text-gray-600">Education</p>
+            <input
+              type="text"
+              placeholder="Education"
+              required
+              value={degree}
+              onChange={(e) => setDegree(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-md bg-[#F8F9FD] outline-none focus:border-primary"
+            />
+          </div>
+
+          <div>
+            <p className="mb-1 text-sm text-gray-600">Address</p>
+
+            <input
+              type="text"
+              placeholder="Address 1"
+              required
+              value={address1}
+              onChange={(e) => setAddress1(e.target.value)}
+              className="w-full px-3 py-2 mb-3 border border-gray-200 rounded-md bg-[#F8F9FD] outline-none focus:border-primary"
+            />
+
+            <input
+              type="text"
+              placeholder="Address 2"
+              required
+              value={address2}
+              onChange={(e) => setAddress2(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-md bg-[#F8F9FD] outline-none focus:border-primary"
+            />
+          </div>
         </div>
       </div>
-      <div>
-        <div>
-          <p>Speciality</p>
-          <select name="" id="">
-            <option value="General Physician">General Physician</option>
-            <option value="Cardiologist">Cardiologist</option>
-            <option value="Dermatologist">Dermatologist</option>
-            <option value="Neurologist">Neurologist</option>
-            <option value="Pediatrician">Pediatrician</option>
-         <option value="Gynecologist">Gynecologist</option>
-          </select>
+{/* About */}
+<div className="mt-6 flex flex-col gap-4">
+  <div>
+    <p className="mb-1 text-sm text-gray-600">About Doctor</p>
 
-        </div>
-<div>
-          <p>Education</p>
-          <input type ="text" placeholder="Education" required/>
-        </div>
-<div>
-  <p>Address</p>
-  <input type="text" placeholder="Address" required/>
+    <textarea
+      rows={5}
+      placeholder="Write about doctor"
+      required
+      value={about}
+      onChange={(e) => setAbout(e.target.value)}
+      className="w-full px-3 py-2 border border-gray-200 rounded-md bg-[#F8F9FD] outline-none resize-none focus:border-primary"
+    />
+  </div>
+
+  <div>
+   <button
+  type="submit"
+  className="mt-6 px-8 py-3 bg-blue-600 text-white rounded"
+>
+  Add Doctor
+</button>
+  </div>
 </div>
-
-      </div>
-    </div>
-   </form>
-  )
-}
+    </form>
+  );
+};
 
 export default AddDoctor;
