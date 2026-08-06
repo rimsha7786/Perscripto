@@ -5,7 +5,7 @@ import Login from './pages/Login'
  import {AdminContext} from './context/AdminContext'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar';
-import { Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from './pages/Admin/Dashboard';
 import AllApointments from './pages/Admin/AllApointments';
 import AddDoctor from './pages/Admin/AddDoctor';
