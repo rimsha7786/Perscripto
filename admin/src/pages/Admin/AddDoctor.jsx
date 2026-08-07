@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { assets } from "../../assets/assets";
 import {useState} from 'react'
+import { AdminContext } from "../../context/AdminContext";
+import { toast } from "react-hot-toast";
+import axiom from "axios";
 
 const AddDoctor = () => {
 
@@ -23,14 +26,48 @@ const [address2, setAddress2] = useState("");
 const [about, setAbout] = useState("");
 
 
+const {backendUrl, aToken} = useContext(AdminContext)
+
+const onSubmithandler = async (event) => {
+  event.preventDefault();
+
+  try {
+    if (!docImg) {
+      return toast.error("Image not selected");
+    }
+
+   const formData = new FormData();
+   formData.append("docImg", docImg);
+   formData.append("name", name);
+   formData.append("email", email);
+   formData.append("password", password);
+   formData.append("experience", experience);
+   formData.append("fees", Number(fees));
+   formData.append("speciality", speciality);
+   formData.append("degree", degree);
+   formData.append("address",JSON.stringify({line1:address1,line2:address2}))
+   formData.append("about", about);
+
+
+   formData.forEach((value,key)=>{
+    console.log('${key}: ${value}')
+   })
+      
+      const {data} = await axiom.post(backendUrl +'/api/admin/add-doctor', formData,{header:{aToken}})
 
 
 
 
+  } catch (error) {
+    console.log(error);
+    toast.error(error.message);
+  }
+};
 
 
   return (
-    <form className="w-full max-w-5xl mx-auto p-6 bg-white rounded-lg shadow">
+    <form  onSubmitHandler={onSubmithandler}
+    className="w-full max-w-5xl mx-auto p-6 bg-white rounded-lg shadow">
       <p className="text-xl font-semibold mb-6">Add Doctor</p>
 
       {/* Upload Image */}
