@@ -55,6 +55,12 @@ const onSubmithandler = async (event) => {
       
       const {data} = await axiom.post(backendUrl +'/api/admin/add-doctor', formData,{header:{aToken}})
 
+      if (data.success) {
+        toast.success(data.message);
+      }
+      else{
+        toast.error(data.message);
+      }
 
 
 
