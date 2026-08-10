@@ -3,7 +3,7 @@ import { assets } from "../../assets/assets";
 import {useState} from 'react'
 import { AdminContext } from "../../context/AdminContext";
 import { toast } from "react-hot-toast";
-import axiom from "axios";
+import axios from "axios";
 
 const AddDoctor = () => {
 
@@ -27,52 +27,74 @@ const [about, setAbout] = useState("");
 
 
 const {backendUrl, aToken} = useContext(AdminContext)
-
+console.log("BACKEND URL:", backendUrl);
+console.log("ADMIN TOKEN:", aToken);
 const onSubmithandler = async (event) => {
   event.preventDefault();
+
+  console.log("ADD DOCTOR FUNCTION CALLED");
 
   try {
     if (!docImg) {
       return toast.error("Image not selected");
     }
 
-   const formData = new FormData();
-   formData.append("docImg", docImg);
-   formData.append("name", name);
-   formData.append("email", email);
-   formData.append("password", password);
-   formData.append("experience", experience);
-   formData.append("fees", Number(fees));
-   formData.append("speciality", speciality);
-   formData.append("degree", degree);
-   formData.append("address",JSON.stringify({line1:address1,line2:address2}))
-   formData.append("about", about);
+    const formData = new FormData();
 
+    formData.append("docImg", docImg);
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("experience", experience);
+    formData.append("fees", Number(fees));
+    formData.append("speciality", speciality);
+    formData.append("degree", degree);
 
-   formData.forEach((value,key)=>{
-    console.log('${key}: ${value}')
-   })
-      
-      const {data} = await axiom.post(backendUrl +'/api/admin/add-doctor', formData,{header:{aToken}})
+    formData.append(
+      "address",
+      JSON.stringify({
+        line1: address1,
+        line2: address2,
+      })
+    );
 
-      if (data.success) {
-        toast.success(data.message);
+    formData.append("about", about);
+
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+
+    console.log("Sending doctor data...");
+
+    const { data } = await axios.post(
+      backendUrl + "/api/admin/add-doctor",
+      formData,
+      {
+        headers: {
+          aToken: aToken,
+        },
       }
-      else{
-        toast.error(data.message);
-      }
+    );
 
+    console.log("SERVER RESPONSE:", data);
 
+    if (data.success) {
+      toast.success(data.message);
+    } else {
+      toast.error(data.message);
+    }
 
   } catch (error) {
-    console.log(error);
-    toast.error(error.message);
+    console.log("ERROR:", error);
+    console.log("ERROR RESPONSE:", error.response?.data);
+
+    toast.error(
+      error.response?.data?.message || error.message
+    );
   }
 };
-
-
   return (
-    <form  onSubmitHandler={onSubmithandler}
+    <form  onSubmit={onSubmithandler}
     className="w-full max-w-5xl mx-auto p-6 bg-white rounded-lg shadow">
       <p className="text-xl font-semibold mb-6">Add Doctor</p>
 
