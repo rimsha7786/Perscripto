@@ -93,13 +93,6 @@ setAddress1("");
 setAddress2("");
 setAbout("");
 
-
-
-
-
-
-
-
 } else {
     toast.error(data.message);
 }
