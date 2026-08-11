@@ -9,9 +9,10 @@ adminRouter.get("/test", (req, res) => {
 });
 
 adminRouter.post(
-  "/add-doctor",authAdmin,
-  upload.single("image"),
-  addDoctor
+    "/add-doctor",
+    authAdmin,
+    upload.single("image"),
+    addDoctor
 );
 
 adminRouter.post("/login", loginAdmin);

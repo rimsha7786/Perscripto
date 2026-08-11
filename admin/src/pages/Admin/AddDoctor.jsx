@@ -26,9 +26,10 @@ const [address2, setAddress2] = useState("");
 const [about, setAbout] = useState("");
 
 
-const {backendUrl, aToken} = useContext(AdminContext)
+const { backendUrl, aToken } = useContext(AdminContext);
+
 console.log("BACKEND URL:", backendUrl);
-console.log("ADMIN TOKEN:", aToken);
+console.log("TOKEN EXISTS:", !!aToken);
 const onSubmithandler = async (event) => {
   event.preventDefault();
 
@@ -41,7 +42,7 @@ const onSubmithandler = async (event) => {
 
     const formData = new FormData();
 
-    formData.append("docImg", docImg);
+   formData.append("image", docImg);
     formData.append("name", name);
     formData.append("email", email);
     formData.append("password", password);
@@ -66,23 +67,23 @@ const onSubmithandler = async (event) => {
 
     console.log("Sending doctor data...");
 
-    const { data } = await axios.post(
-      backendUrl + "/api/admin/add-doctor",
-      formData,
-      {
+const { data } = await axios.post(
+    backendUrl + "/api/admin/add-doctor",
+    formData,
+    {
         headers: {
-          aToken: aToken,
+            token: aToken,
         },
-      }
-    );
-
-    console.log("SERVER RESPONSE:", data);
-
-    if (data.success) {
-      toast.success(data.message);
-    } else {
-      toast.error(data.message);
     }
+);
+
+console.log("SERVER RESPONSE:", data);
+
+if (data.success) {
+    toast.success(data.message);
+} else {
+    toast.error(data.message);
+}
 
   } catch (error) {
     console.log("ERROR:", error);
