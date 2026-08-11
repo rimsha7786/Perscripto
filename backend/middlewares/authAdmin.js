@@ -2,16 +2,14 @@ import jwt from "jsonwebtoken";
 
 const authAdmin = async (req, res, next) => {
     try {
-        const { token } = req.headers;
+        const token = req.headers.token;
 
         console.log("TOKEN EXISTS:", !!token);
-        console.log("JWT SECRET EXISTS:", !!process.env.JWT_SECRET);
-        console.log("ADMIN EMAIL:", process.env.ADMIN_EMAIL);
 
         if (!token) {
             return res.json({
                 success: false,
-                message: "Authentication failed",
+                message: "Authentication failed - token missing",
             });
         }
 
@@ -21,25 +19,21 @@ const authAdmin = async (req, res, next) => {
         );
 
         console.log("TOKEN EMAIL:", token_decoded.email);
-        console.log("ENV ADMIN EMAIL:", process.env.ADMIN_EMAIL);
+        console.log("ADMIN EMAIL:", process.env.ADMIN_EMAIL);
 
         if (token_decoded.email !== process.env.ADMIN_EMAIL) {
-            console.log("EMAIL DOES NOT MATCH");
-
             return res.json({
                 success: false,
-                message: "Authentication failed",
+                message: "Authentication failed - invalid admin",
             });
         }
 
-        console.log("ADMIN AUTHENTICATED SUCCESSFULLY");
-
         next();
 
-    } catch (err) {
-        console.log("AUTH ERROR:", err);
+    } catch (error) {
+        console.log("AUTH ERROR:", error);
 
-        res.json({
+        return res.json({
             success: false,
             message: "Authentication failed",
         });

@@ -1,12 +1,15 @@
 import express from "express";
-import { addDoctor,loginAdmin } from "../controllers/adminController.js";
+
+import {
+    addDoctor,
+    allDoctors,
+    loginAdmin
+} from "../controllers/adminController.js";
+
 import upload from "../middlewares/multer.js";
 import authAdmin from "../middlewares/authAdmin.js";
-const adminRouter = express.Router();
 
-adminRouter.get("/test", (req, res) => {
-  res.send("Admin route working");
-});
+const adminRouter = express.Router();
 
 adminRouter.post(
     "/add-doctor",
@@ -15,6 +18,15 @@ adminRouter.post(
     addDoctor
 );
 
-adminRouter.post("/login", loginAdmin);
+adminRouter.post(
+    "/all-doctors",
+    authAdmin,
+    allDoctors
+);
+
+adminRouter.post(
+    "/login",
+    loginAdmin
+);
 
 export default adminRouter;

@@ -81,6 +81,25 @@ console.log("SERVER RESPONSE:", data);
 
 if (data.success) {
     toast.success(data.message);
+setDocImg(false);
+setName("");
+setEmail("");
+setPassword("");
+setExperience("1 Year");
+setFees("");
+setSpeciality("General Physician");
+setDegree("");
+setAddress1("");
+setAddress2("");
+setAbout("");
+
+
+
+
+
+
+
+
 } else {
     toast.error(data.message);
 }
