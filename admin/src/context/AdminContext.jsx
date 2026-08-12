@@ -1,7 +1,6 @@
 import axios from "axios";
 import { createContext, useState } from "react";
 import toast from "react-hot-toast";
-import { doctors } from "../../../frontend/src/assets/assets";
 export const AdminContext = createContext();
 const AdminContextProvider = (props) => {
 
@@ -15,9 +14,15 @@ const AdminContextProvider = (props) => {
 
   const getAllDoctors = async () => {
     try {
-      const { data } = await axios.post(
-        backendUrl + "/api/admin/all-doctors"
-      );
+     const { data } = await axios.post(
+  backendUrl + "/api/admin/all-doctors",
+  {},
+  {
+    headers: {
+      token: aToken,
+    },
+  }
+);
 
       if (data.success) {
         setDoctors(data.doctors);
