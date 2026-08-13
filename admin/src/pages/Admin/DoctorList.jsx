@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AdminContext } from "../../context/AdminContext";
 
 const DoctorList = () => {
-  const { doctors, aToken, getAllDoctors } = useContext(AdminContext);
+  const { doctors, aToken, getAllDoctors ,changeAvailability} = useContext(AdminContext);
 
   const [selectedDoctor, setSelectedDoctor] = useState(null);
 
@@ -71,9 +71,10 @@ const DoctorList = () => {
               <div className="flex items-center gap-1.5 mt-2">
 
                 <input
+                onChange={()=>changeAvailability(item._id)}
                   type="checkbox"
                   checked={item.available}
-                  readOnly
+              
                   className="w-3 h-3 accent-blue-500"
                 />
 

@@ -8,6 +8,7 @@ import {
 
 import upload from "../middlewares/multer.js";
 import authAdmin from "../middlewares/authAdmin.js";
+import { changeAvailability } from "../controllers/doctorController.js";
 
 const adminRouter = express.Router();
 
@@ -27,6 +28,10 @@ adminRouter.post(
 adminRouter.post(
     "/login",
     loginAdmin
+);
+adminRouter.post(
+    "/change-availability",
+    authAdmin,changeAvailability
 );
 
 export default adminRouter;
