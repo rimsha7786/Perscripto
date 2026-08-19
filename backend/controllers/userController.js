@@ -112,4 +112,4 @@ else{
     res.json({success:false,message:error.message})
   }
 }
-export { registerUser };
+export { registerUser ,loginUser};

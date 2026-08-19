@@ -11,9 +11,15 @@ import Navbar from './components/Navbar'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Appointments from './pages/Appointments'
+import { ToastContainer,toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const App = () => {
   return (
   <div className='max-w-7xl mx-auto sm:mx-[10%]'>
+    
+    <ToastContainer/>
     <Navbar/>
     
 <Routes>
