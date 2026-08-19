@@ -7,7 +7,7 @@ import axios from "axios";
 
 const AddDoctor = () => {
 
-
+//doctors
 const [docImg, setDocImg] = useState(false);
 
 const [name, setName] = useState("");

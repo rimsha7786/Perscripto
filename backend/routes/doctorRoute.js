@@ -9,7 +9,7 @@ doctorRouter.post("/test", (req, res) => {
         message: "Doctor route working"
     });
 });
-
+//list
 doctorRouter.post("/list", doctorList);
 
 export default doctorRouter;

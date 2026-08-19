@@ -21,7 +21,7 @@ setRelDocs(doctorsData)
 },[doctors,speciality])
 
 
-
+//related doctor
   return (
     <div className="flex flex-col items-center gap-2 py-16 text-gray-800">
 

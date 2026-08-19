@@ -15,7 +15,7 @@ const navigate = useNavigate()
           <p>Book Appointment</p>
           <p className='mt-2'>With 100+ Trusted Doctors</p>
         </div>
-
+//buttton
 
         <button
 onClick={() => {

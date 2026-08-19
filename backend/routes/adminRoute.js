@@ -29,6 +29,7 @@ adminRouter.post(
     "/login",
     loginAdmin
 );
+//change route
 adminRouter.post(
     "/change-availability",
     authAdmin,changeAvailability
