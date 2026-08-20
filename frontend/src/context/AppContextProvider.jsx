@@ -1,42 +1,46 @@
 import { AppContext } from "./AppContext";
-import { doctors } from "../assets/assets";
-import axios from 'axios'
-import { useState } from "react";
-import { useEffect } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 const AppContextProvider = ({ children }) => {
 
-  const currencySymbol = 'PKR '
-const backendUrl = import.meta.env.VITE_BACKEND_URL
-const [doctors,setDoctors] = useState([])
+  const currencySymbol = "PKR ";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  const value = {
-    doctors,currencySymbol 
+  const [doctors, setDoctors] = useState([]);   // ← empty array, mock data hata di
+  const [token, setToken] = useState(
+    localStorage.getItem("token")
+      ? localStorage.getItem("token")
+      : false
+  );
+
+  const getDoctorsData = async () => {
+    try {
+      const { data } = await axios.post(backendUrl + "/api/doctor/list");
+
+      if (data.success) {
+        setDoctors(data.doctors);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
   };
 
+  const value = {
+    doctors,
+    currencySymbol,
+    backendUrl,
+    token,
+    setToken
+  };
 
-  const getDoctorsData = async()=>{
-    try{
-
-      const {data} = await axios.post(backendUrl + '/api/doctor/list')
-      if(data.success){
-        setDoctors(data.doctors)
-
-      }
-      else{
-        toast.error(data.message)
-      }
-
-    }catch(error){
-console.log(error)
-toast.error(error.message)
-
-    }
-  }
-  useEffect(()=>{
-    getDoctorsData()
-  },[])
+  useEffect(() => {
+    getDoctorsData();
+  }, []);
 
   return (
     <AppContext.Provider value={value}>
