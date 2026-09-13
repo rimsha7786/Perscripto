@@ -1,3 +1,4 @@
+
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -15,6 +16,9 @@ const Myprofile = () => {
   const [saving, setSaving] = useState(false);
 
   const [userData, setUserData] = useState(null);
+
+  // Image state
+  const [image, setImage] = useState(null);
 
   // Load data from AppContext
   React.useEffect(() => {
@@ -34,16 +38,22 @@ const Myprofile = () => {
       setSaving(true);
 
       const formData = new FormData();
-      formData.append("name", userData.name);
 
+      formData.append("name", userData.name);
       formData.append("userId", userData._id);
       formData.append("phone", userData.phone);
       formData.append("dob", userData.dob);
       formData.append("gender", userData.gender);
+
       formData.append(
         "address",
         JSON.stringify(userData.address)
       );
+
+      // Add image only if user selected a new image
+      if (image) {
+        formData.append("image", image);
+      }
 
       const { data } = await axios.post(
         backendUrl + "/api/user/update-profile",
@@ -59,8 +69,12 @@ const Myprofile = () => {
         toast.success(data.message || "Profile Updated");
 
         // Update AppContext
-        setContextUserData(userData);
+        setContextUserData({
+          ...userData,
+          image: data.image || userData.image,
+        });
 
+        setImage(null);
         setIsEdit(false);
       } else {
         toast.error(data.message || "Data Missing");
@@ -83,10 +97,67 @@ const Myprofile = () => {
   return (
     <div className="max-w-lg flex flex-col gap-2 text-sm">
 
+      {/* Profile Image */}
+      <div className="mt-4">
+
+        {isEdit ? (
+          <label htmlFor="profile-image" className="cursor-pointer">
+
+            <img
+              className="w-32 h-32 rounded-full object-cover"
+              src={
+                image
+                  ? URL.createObjectURL(image)
+                  : userData.image
+              }
+              alt="Profile"
+            />
+
+            <input
+              id="profile-image"
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) => {
+                if (e.target.files[0]) {
+                  setImage(e.target.files[0]);
+                }
+              }}
+            />
+
+            <p className="text-blue-500 mt-2">
+              Change Profile Image
+            </p>
+
+          </label>
+        ) : (
+          <img
+            className="w-32 h-32 rounded-full object-cover"
+            src={userData.image}
+            alt="Profile"
+          />
+        )}
+
+      </div>
+
       {/* Name */}
-      <p className="font-medium text-3xl text-neutral-800 mt-4">
-        {userData.name}
-      </p>
+      {isEdit ? (
+        <input
+          className="bg-gray-100 max-w-80 text-3xl font-medium text-neutral-800 mt-4 px-2 py-1"
+          type="text"
+          value={userData.name || ""}
+          onChange={(e) =>
+            setUserData((prev) => ({
+              ...prev,
+              name: e.target.value,
+            }))
+          }
+        />
+      ) : (
+        <p className="font-medium text-3xl text-neutral-800 mt-4">
+          {userData.name}
+        </p>
+      )}
 
       <hr className="bg-zinc-400 h-[1px] border-none" />
 
@@ -254,6 +325,7 @@ const Myprofile = () => {
                   },
                 });
 
+                setImage(null);
                 setIsEdit(false);
               }}
             >

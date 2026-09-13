@@ -1,20 +1,31 @@
 import { AppContext } from '../context/AppContext';
 import { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { assets } from '../assets/assets';
 import RelatedDoctors from '../components/RelatedDoctors';
-
+import { toast } from 'react-toastify';
+import axios from 'axios';
 const Appointments = () => {
   const { docId } = useParams();
-  const { doctors,currencySymbol  } = useContext(AppContext);
+  const { doctors,currencySymbol,backendUrl,token,getDoctorsData } = useContext(AppContext);
   const daysOfWeek = ['SUN','MON','TUE','WED','THU','FRI','SAT']
   
-  
+  const navigate = useNavigate();
   
   const [docInfo, setDocInfo] = useState(null);
   const [docSlots,setDocSlots] = useState([])
   const [slotIndex,setSlotIndex] = useState(0)
 const [slotTime,setSlotTime] = useState('')
+
+
+
+
+
+
+
+
+
+
 
 const fetchDocInfo = () => {
     const docInfo = doctors.find(doc => doc._id === docId);
@@ -65,6 +76,52 @@ currentDate.setMinutes(currentDate.getMinutes() + 30)
   }
 };
 
+const bookAppointment = async () => {
+  if (!token) {
+    toast.warn('Login to book appointment');
+    return navigate('/login');
+  }
+
+  if (!slotTime) {
+    toast.warn('Please select a time slot');
+    return;
+  }
+
+  try {
+    const date = docSlots[slotIndex][0].datetime;
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    let slotDate = day + '-' + month + '-' + year;
+
+    const { data } = await axios.post(
+      backendUrl + '/api/user/book-appointment',
+      {
+        docId,
+        slotDate,
+        slotTime
+      },
+      {
+        headers: {
+          atoken: token
+        }
+      }
+    );
+
+    if (data.success) {
+      toast.success(data.message);
+      getDoctorsData();
+      navigate('/appointments');
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error(error.message);
+  }
+};
   
   useEffect(() => {
     fetchDocInfo();
@@ -90,7 +147,7 @@ currentDate.setMinutes(currentDate.getMinutes() + 30)
             <div className='flex-1 border border-gray-400 rounded-lg p-8 py-7 bg-white mx-2 sm:mx-0 mt-[-80px] sm:mt-0'>
               <p className='flex item-center gap-2 text-2xl font-medium text-gray-900'
               >{docInfo.name} <img className='w-5' src={assets.verified_icon} alt=""/></p> 
-           <div className='flex item-center gap-2 text-sm mt-1 text-gray-600'>
+           <div className ='flex item-center gap-2 text-sm mt-1 text-gray-600'>
             <p>{docInfo.degree}-{docInfo.speciality}</p>
             <button className='py-0.5 px-2 border text-xs rounded-full'>{docInfo.experience}</button>
            </div>
@@ -144,7 +201,12 @@ currentDate.setMinutes(currentDate.getMinutes() + 30)
     ))}
 </div>
 
-<button className='bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6'>Book an appointment</button>
+<button
+  onClick={bookAppointment}
+  className='bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6'
+>
+  Book an appointment
+</button>
 
      </div>
       {docInfo && (

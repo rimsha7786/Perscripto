@@ -52,7 +52,7 @@ catch (error){
   }
 
   const value = {
-    doctors,
+    doctors,getDoctorsData,
     currencySymbol,
     backendUrl,
     token,

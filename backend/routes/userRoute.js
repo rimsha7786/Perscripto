@@ -4,7 +4,9 @@ import {
   registerUser,
   loginUser,
   getProfile,
-  updateProfile
+  updateProfile,
+  bookAppointment
+
 } from "../controllers/userController.js";
 
 import authUser from "../middlewares/authUser.js";
@@ -24,6 +26,9 @@ userRouter.post("/login", loginUser);
 // Get Profile
 userRouter.get('/get-profile', authUser, getProfile)
 userRouter.post('/update-profile', upload.single("image"),authUser,updateProfile)
+
+userRouter.post('/book-appointment',authUser,bookAppointment)
+
 
 
 export default userRouter;
