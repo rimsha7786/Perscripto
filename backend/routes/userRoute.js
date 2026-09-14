@@ -5,8 +5,8 @@ import {
   loginUser,
   getProfile,
   updateProfile,
-  bookAppointment
-
+  bookAppointment,
+  listAppointments
 } from "../controllers/userController.js";
 
 import authUser from "../middlewares/authUser.js";
@@ -29,6 +29,6 @@ userRouter.post('/update-profile', upload.single("image"),authUser,updateProfile
 
 userRouter.post('/book-appointment',authUser,bookAppointment)
 
-
+userRouter.get('/appointments',authUser,listAppointments)
 
 export default userRouter;

@@ -32,7 +32,9 @@ const fetchDocInfo = () => {
     setDocInfo(docInfo);
     console.log(docInfo);
   };
-  const getAvailableSlots = async () => {
+ const getAvailableSlots = async () => {
+  if (!docInfo) return;
+
   setDocSlots([]);
   let today = new Date();
 
@@ -61,11 +63,23 @@ let formattedTime = currentDate.toLocaleTimeString([], {
   minute: '2-digit',
   hour12: true
 });
+let day = currentDate.getDate();
+let month = currentDate.getMonth() + 1;
+let year = currentDate.getFullYear();
 
-timeSlots.push({
-  datetime: new Date(currentDate),
-  time: formattedTime
-})
+const slotDate = day + '-' + month + '-' + year;
+const slotTime = formattedTime;
+
+const isSlotBooked = docInfo.slots_booked && docInfo.slots_booked[slotDate] && docInfo.slots_booked[slotDate].includes(slotTime) ? false : true;
+
+
+
+if(isSlotBooked){
+  timeSlots.push({
+    datetime: new Date(currentDate),
+    time: formattedTime
+  })
+}
 
 currentDate.setMinutes(currentDate.getMinutes() + 30)
 
@@ -114,6 +128,7 @@ const bookAppointment = async () => {
       toast.success(data.message);
       getDoctorsData();
       navigate('/appointments');
+      
     } else {
       toast.error(data.message);
     }
@@ -128,8 +143,11 @@ const bookAppointment = async () => {
   }, [doctors, docId]);
   
   useEffect(() => {
+  if (docInfo) {
     getAvailableSlots();
-  }, [docInfo]);
+  }
+}, [docInfo]);
+
     useEffect(() => {
   console.log(docSlots);
 }, [docSlots]);
