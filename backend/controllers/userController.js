@@ -6,6 +6,7 @@ import { json } from "express";
 import {v2 as cloudinary} from "cloudinary"
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
+  
 // API to register user
 const registerUser = async (req, res) => {
   try {
@@ -295,6 +296,59 @@ const listAppointments = async (req, res) => {
 
   }
 };
+const cancelAppointment = async (req, res) => {
+  try {
+    const { appointmentId } = req.body;
+    const userId = req.userId;
+
+    const appointment = await appointmentModel.findById(appointmentId);
+
+    if (!appointment) {
+      return res.json({
+        success: false,
+        message: "Appointment not found"
+      });
+    }
+
+    if (appointment.userId.toString() !== userId.toString()) {
+      return res.json({
+        success: false,
+        message: "You are not authorized to cancel this appointment"
+      });
+    }
+
+    const { docId, slotDate, slotTime } = appointment;
+
+const docData = await doctorModel.findById(docId);
+
+let slots_booked = docData.slots_booked || {};
+
+if (slots_booked[slotDate]) {
+  slots_booked[slotDate] = slots_booked[slotDate].filter(
+    e => e !== slotTime
+  );
+}
+
+await doctorModel.findByIdAndUpdate(docId, {
+  slots_booked
+});
+
+await appointmentModel.findByIdAndDelete(appointmentId);;
+
+    res.json({
+      success: true,
+      message: "Appointment Cancelled Successfully"
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.json({
+      success: false,
+      message: error.message
+    });
+  }
+};
 
 
 
@@ -302,6 +356,4 @@ const listAppointments = async (req, res) => {
 
 
 
-
-
-export { registerUser, loginUser, getProfile, updateProfile, bookAppointment,listAppointments };
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment,listAppointments , cancelAppointment};

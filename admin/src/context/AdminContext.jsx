@@ -9,6 +9,11 @@ const AdminContextProvider = (props) => {
   );
 
   const [doctors, setDoctors] = useState([]);
+const [appointments,setAppointments] = useState([])
+
+
+
+
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -56,7 +61,22 @@ const changeAvailability = async (docId) => {
     toast.error(error.response?.data?.message || error.message);
   }
 };
-
+const getAllAppointments  = async()=>{
+  try{
+    const { data } = await axios.get(backendUrl + "/api/admin/appointments",{
+      headers: {
+        token: aToken
+      }
+    })
+    if(data.success){
+      setAppointments(data.appointments)
+    }else{
+      toast.error(data.message)
+     }
+  }catch(error){
+toast.error(error.message)
+  }
+}
 
 
   const value = {
@@ -65,7 +85,11 @@ const changeAvailability = async (docId) => {
     backendUrl,
     doctors,
     getAllDoctors,
-    changeAvailability
+    changeAvailability,
+    appointments,
+    setAppointments,
+    getAllAppointments
+
   };
 
   return (
