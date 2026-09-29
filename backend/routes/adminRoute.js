@@ -4,7 +4,8 @@ import {
   addDoctor,
   allDoctors,
   loginAdmin,
-  appointments
+  appointments,
+  admindashData
 } from "../controllers/adminController.js";
 import upload from "../middlewares/multer.js";
 import authAdmin from "../middlewares/authAdmin.js";
@@ -37,5 +38,10 @@ adminRouter.post(
 adminRouter.get(
     "/appointments",
     authAdmin,appointments
+);
+adminRouter.get(
+  "/dashboard",
+  authAdmin,
+  admindashData
 );
 export default adminRouter;

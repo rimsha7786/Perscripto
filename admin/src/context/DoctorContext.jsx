@@ -1,12 +1,23 @@
-import { createContext } from "react";
+import { createContext,useState } from "react";
 
 export const DoctorContext = createContext()
 //doctors
 const DoctorContextProvider = (props)=>{
 
-    const value = {
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 
-    }
+const [dToken, setDToken] = useState('')
+
+const value = {
+    dToken, setDToken,
+    backendUrl,
+}
+
+
+
+
+
+   
 return (
     <DoctorContext.Provider value={value}>
         {props.children}

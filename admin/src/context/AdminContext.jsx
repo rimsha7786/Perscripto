@@ -10,7 +10,7 @@ const AdminContextProvider = (props) => {
 
   const [doctors, setDoctors] = useState([]);
 const [appointments,setAppointments] = useState([])
-
+const [dashData,setDashData] = useState(false)
 
 
 
@@ -70,6 +70,7 @@ const getAllAppointments  = async()=>{
     })
     if(data.success){
       setAppointments(data.appointments)
+      console.log(data.appointments);
     }else{
       toast.error(data.message)
      }
@@ -77,6 +78,32 @@ const getAllAppointments  = async()=>{
 toast.error(error.message)
   }
 }
+const getDashData = async () => {
+  console.log("getDashData called");
+
+  try {
+    const { data } = await axios.get(
+      backendUrl + "/api/admin/dashboard",
+      {
+        headers: {
+          token: aToken
+        }
+      }
+    );
+
+    console.log("API Response:", data);
+
+    if (data.success) {
+      setDashData(data.dashData);
+      console.log("Dashboard Data:", data.dashData);
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    console.log("Dashboard Error:", error);
+    toast.error(error.response?.data?.message || error.message);
+  }
+};
 
 
   const value = {
@@ -88,7 +115,8 @@ toast.error(error.message)
     changeAvailability,
     appointments,
     setAppointments,
-    getAllAppointments
+    getAllAppointments,
+    dashData,getDashData
 
   };
 

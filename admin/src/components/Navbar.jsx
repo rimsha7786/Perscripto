@@ -33,9 +33,15 @@ const Navbar = () => {
         </p>
       </div>
 
-      <button className='bg-primary text-white text-sm px-10 py-2 rounded-full'>
-        Logout
-      </button>
+ <button
+  onClick={() => {
+    localStorage.removeItem("aToken");
+    setAToken("");
+  }}
+  className='bg-[#5f6fff] text-white text-sm px-10 py-2.5 rounded-full hover:bg-[#4f5ee6] active:scale-95 transition-all duration-200 shadow-sm font-medium'
+>
+  Logout
+</button>
 
     </div>
   );
